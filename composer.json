@@ -18,6 +18,7 @@
     "scripts": {
         "test": "./vendor/bin/phpunit --bootstrap vendor/autoload.php test",
         "coverage": "./vendor/bin/phpunit --coverage-html coverage/ --whitelist src/ --bootstrap vendor/autoload.php test",
+        "coverage-docker": "./vendor/bin/phpunit --coverage-text --whitelist src/ --bootstrap vendor/autoload.php test",
         "post-install-cmd": "composer dump-autoload -o"
     },
     "require-dev": {
