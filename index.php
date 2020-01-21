@@ -8,37 +8,6 @@ echo PHP_EOL;
 
 $currency = '$';
 
-function displayTitle($title) {
-    echo str_pad(' ' . $title . ' ', '40', '=', STR_PAD_BOTH) . PHP_EOL;
-}
-
-function getRandomPrice($max = 100000) {
-    try {
-        return random_int(0, $max) / 100;
-    } catch (Exception $e) {
-        throw new \http\Exception\RuntimeException($e);
-    }
-}
-
-function formatPrice(float $price) {
-    return number_format($price, 2, ',', ' ');
-}
-
-function addControllerToElectronicItem(\App\ElectronicItem $electronicItem, $type) {
-    $itemController = new \App\ItemController($type);
-    $itemController->setPrice(getRandomPrice(5000));
-    $isAdded = $electronicItem->addExtra($itemController);
-    if (!$isAdded) {
-        echo 'Warning: unable to add a controller to ' . $electronicItem->getName() . PHP_EOL;
-    }
-}
-
-function displayRowItemPrice(string $name, float $price) {
-    global $currency;
-    $priceFormatted = formatPrice($price);
-    echo str_pad($name, 20, ' ', STR_PAD_RIGHT) .' ' . str_pad($priceFormatted.' ' . $currency, 10, ' ', STR_PAD_LEFT) . PHP_EOL;
-}
-
 $items = [];
 
 $itemConsole = new \App\ItemConsole();
@@ -97,4 +66,40 @@ if (isset($itemConsoles[0])) {
     }
 } else {
     echo 'Error: console not found !' . PHP_EOL;
+}
+
+function displayTitle($title)
+{
+    echo str_pad(' '.$title.' ', '40', '=', STR_PAD_BOTH).PHP_EOL;
+}
+
+function getRandomPrice($max = 100000)
+{
+    try {
+        return random_int(0, $max) / 100;
+    } catch (Exception $e) {
+        throw new \http\Exception\RuntimeException($e);
+    }
+}
+
+function formatPrice(float $price)
+{
+    return number_format($price, 2, ',', ' ');
+}
+
+function addControllerToElectronicItem(\App\ElectronicItem $electronicItem, $type)
+{
+    $itemController = new \App\ItemController($type);
+    $itemController->setPrice(getRandomPrice(5000));
+    $isAdded = $electronicItem->addExtra($itemController);
+    if (!$isAdded) {
+        echo 'Warning: unable to add a controller to '.$electronicItem->getName().PHP_EOL;
+    }
+}
+
+function displayRowItemPrice(string $name, float $price)
+{
+    global $currency;
+    $priceFormatted = formatPrice($price);
+    echo str_pad($name, 20, ' ', STR_PAD_RIGHT).' '.str_pad($priceFormatted.' '.$currency, 10, ' ', STR_PAD_LEFT).PHP_EOL;
 }

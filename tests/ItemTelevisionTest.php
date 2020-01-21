@@ -5,7 +5,7 @@ use App\ItemController;
 use PHPUnit\Framework\TestCase;
 
 
-class itemTelevisionTest extends TestCase
+class ItemTelevisionTest extends TestCase
 {
 
     private const ITEM_PRICE = 15;
@@ -16,21 +16,6 @@ class itemTelevisionTest extends TestCase
      * @var ItemTelevision
      */
     private $itemTelevision;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->itemTelevision = new ItemTelevision();
-        $this->itemTelevision->setPrice(self::ITEM_PRICE);
-    }
-
-    private function addAnExtraController(float $price)
-    {
-        $itemController = new ItemController();
-        $itemController->setPrice($price);
-        return $this->itemTelevision->addExtra($itemController);
-    }
 
     public function testMaxExtras(): void
     {
@@ -49,7 +34,7 @@ class itemTelevisionTest extends TestCase
 
     public function testGetName(): void
     {
-        $this->assertEquals('Television ' . ItemTelevision::$counter, $this->itemTelevision->getName());
+        $this->assertEquals('Television '.ItemTelevision::$counter, $this->itemTelevision->getName());
     }
 
     public function testGetNoExtra(): void
@@ -80,7 +65,23 @@ class itemTelevisionTest extends TestCase
     {
         $this->addAnExtraController(self::ITEM_EXTRA_1_PRICE);
         $this->addAnExtraController(self::ITEM_EXTRA_2_PRICE);
-        $totalPrice = self::ITEM_PRICE+self::ITEM_EXTRA_1_PRICE+self::ITEM_EXTRA_2_PRICE;
+        $totalPrice = self::ITEM_PRICE + self::ITEM_EXTRA_1_PRICE + self::ITEM_EXTRA_2_PRICE;
         $this->assertEquals($totalPrice, $this->itemTelevision->getTotalPrice());
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->itemTelevision = new ItemTelevision();
+        $this->itemTelevision->setPrice(self::ITEM_PRICE);
+    }
+
+    private function addAnExtraController(float $price): bool
+    {
+        $itemController = new ItemController();
+        $itemController->setPrice($price);
+
+        return $this->itemTelevision->addExtra($itemController);
     }
 }

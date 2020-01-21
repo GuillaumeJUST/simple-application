@@ -19,14 +19,6 @@ class ItemControllerTest extends TestCase
      */
     private $itemController;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->itemController = new ItemController();
-        $this->itemController->setPrice(self::ITEM_PRICE);
-    }
-
     public function testGetType(): void
     {
         $this->assertEquals('wired controller', $this->itemController->getType());
@@ -42,5 +34,13 @@ class ItemControllerTest extends TestCase
         $itemController = new ItemController('foo');
         $itemController->setPrice(self::ITEM_PRICE);
         $this->assertEquals('wired controller', $itemController->getType());
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->itemController = new ItemController();
+        $this->itemController->setPrice(self::ITEM_PRICE);
     }
 }

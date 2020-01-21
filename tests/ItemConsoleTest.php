@@ -20,24 +20,9 @@ class ItemConsoleTest extends TestCase
      */
     private $itemConsole;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->itemConsole = new ItemConsole();
-        $this->itemConsole->setPrice(self::ITEM_PRICE);
-    }
-
     public function testMaxExtras(): void
     {
         $this->assertEquals(4, $this->itemConsole->maxExtras());
-    }
-
-    private function addAnExtraController(float $price)
-    {
-        $itemController = new ItemController();
-        $itemController->setPrice($price);
-        return $this->itemConsole->addExtra($itemController);
     }
 
     public function testGetType(): void
@@ -79,5 +64,21 @@ class ItemConsoleTest extends TestCase
         $this->addAnExtraController(30);
         $this->addAnExtraController(40);
         $this->assertTrue($this->itemConsole->hasReachMaxExtras());
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->itemConsole = new ItemConsole();
+        $this->itemConsole->setPrice(self::ITEM_PRICE);
+    }
+
+    private function addAnExtraController(float $price): bool
+    {
+        $itemController = new ItemController();
+        $itemController->setPrice($price);
+
+        return $this->itemConsole->addExtra($itemController);
     }
 }

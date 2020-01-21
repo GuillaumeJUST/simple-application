@@ -4,8 +4,7 @@ use App\ItemMicrowave;
 use App\ItemController;
 use PHPUnit\Framework\TestCase;
 
-
-class itemMicrowaveTest extends TestCase
+class ItemMicrowaveTest extends TestCase
 {
     private const ITEM_PRICE = 15;
     private const ITEM_EXTRA_1_PRICE = 20;
@@ -14,14 +13,6 @@ class itemMicrowaveTest extends TestCase
      * @var ItemMicrowave
      */
     private $itemMicrowave;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->itemMicrowave = new ItemMicrowave();
-        $this->itemMicrowave->setPrice(self::ITEM_PRICE);
-    }
 
     public function testGetType(): void
     {
@@ -47,5 +38,13 @@ class itemMicrowaveTest extends TestCase
         $itemController->setPrice(self::ITEM_EXTRA_1_PRICE);
         $this->itemMicrowave->addExtra($itemController);
         $this->assertCount(0, $this->itemMicrowave->getExtras());
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->itemMicrowave = new ItemMicrowave();
+        $this->itemMicrowave->setPrice(self::ITEM_PRICE);
     }
 }

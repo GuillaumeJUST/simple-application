@@ -15,42 +15,6 @@ class ElectronicItemsTest extends TestCase
      */
     private $electronicItems;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $electronicItems = $this->generateElectronicItems();
-        shuffle($electronicItems);
-        $this->electronicItems = new ElectronicItems($electronicItems);
-    }
-
-    private function generateElectronicItems(): array
-    {
-        $electronicItems = [];
-
-        $electronicItem = new ItemTelevision();
-        $electronicItem->setPrice(50);
-        $electronicItems[] = $electronicItem;
-
-        $electronicItem = new ItemTelevision();
-        $electronicItem->setPrice(10);
-        $electronicItems[] = $electronicItem;
-
-        $electronicItem = new ItemTelevision();
-        $electronicItem->setPrice(40);
-        $electronicItems[] = $electronicItem;
-
-        $electronicItem = new ItemMicrowave();
-        $electronicItem->setPrice(5);
-        $electronicItems[] = $electronicItem;
-
-        $electronicItem = new ItemMicrowave();
-        $electronicItem->setPrice(35);
-        $electronicItems[] = $electronicItem;
-
-        return $electronicItems;
-    }
-
     public function testFirstTypeSortedItems(): void
     {
         $sortedElectronicItems = $this->electronicItems->getSortedItems();
@@ -123,5 +87,41 @@ class ElectronicItemsTest extends TestCase
         /** @var ElectronicItem $sortedElectronicItem */
         $sortedElectronicItem = array_pop($sortedElectronicItems);
         $this->assertEquals(70, $sortedElectronicItem->getTotalPrice());
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $electronicItems = $this->generateElectronicItems();
+        shuffle($electronicItems);
+        $this->electronicItems = new ElectronicItems($electronicItems);
+    }
+
+    private function generateElectronicItems(): array
+    {
+        $electronicItems = [];
+
+        $electronicItem = new ItemTelevision();
+        $electronicItem->setPrice(50);
+        $electronicItems[] = $electronicItem;
+
+        $electronicItem = new ItemTelevision();
+        $electronicItem->setPrice(10);
+        $electronicItems[] = $electronicItem;
+
+        $electronicItem = new ItemTelevision();
+        $electronicItem->setPrice(40);
+        $electronicItems[] = $electronicItem;
+
+        $electronicItem = new ItemMicrowave();
+        $electronicItem->setPrice(5);
+        $electronicItems[] = $electronicItem;
+
+        $electronicItem = new ItemMicrowave();
+        $electronicItem->setPrice(35);
+        $electronicItems[] = $electronicItem;
+
+        return $electronicItems;
     }
 }

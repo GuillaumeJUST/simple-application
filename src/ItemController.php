@@ -8,19 +8,13 @@
 
 namespace App;
 
-
-use http\Exception\RuntimeException;
-
 class ItemController extends ElectronicItem
 {
-    public static $counter = 0;
-
     public const TYPE_REMOTE = 'remote';
     public const TYPE_WIRED = 'wired';
     public const TYPE_DEFAULT = self::TYPE_WIRED;
-
     private const TYPES_ALLOWED = [self::TYPE_REMOTE, self::TYPE_WIRED];
-
+    public static $counter = 0;
     private $type;
 
     public function __construct($type = self::TYPE_DEFAULT)
@@ -37,7 +31,7 @@ class ItemController extends ElectronicItem
 
     public function getType(): string
     {
-        return $this->type . ' controller';
+        return $this->type.' controller';
     }
 
     public function maxExtras(): ?int

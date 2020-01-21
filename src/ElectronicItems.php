@@ -24,9 +24,10 @@ class ElectronicItems
     public function getSortedItems(bool $itemTotalPrice = true): array
     {
         $sortedItem = array_values($this->items);
-        usort($sortedItem, function (ElectronicItem $itemA, ElectronicItem $itemB) use($itemTotalPrice) {
+        usort($sortedItem, function (ElectronicItem $itemA, ElectronicItem $itemB) use ($itemTotalPrice) {
             $priceA = $itemTotalPrice ? $itemA->getTotalPrice() : $itemA->getPrice();
             $priceB = $itemTotalPrice ? $itemB->getTotalPrice() : $itemB->getPrice();
+
             return $priceA > $priceB;
         });
 
@@ -35,6 +36,7 @@ class ElectronicItems
 
     /**
      * @param string $type
+     *
      * @return ElectronicItem[]
      */
     public function getItemsByType(string $type): array
@@ -42,13 +44,14 @@ class ElectronicItems
         $callback = function (ElectronicItem $item) use ($type) {
             return $item instanceof $type;
         };
+
         return array_filter($this->items, $callback);
     }
 
     public function getTotalPrice(): float
     {
         $totalPrice = 0;
-        foreach($this->items as $item) {
+        foreach ($this->items as $item) {
             $totalPrice += $item->getTotalPrice();
         }
 
