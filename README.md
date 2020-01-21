@@ -12,10 +12,13 @@ This is a simple php application with unit test.
  - PHP V 7.2
  - Composer
  
+ Or 
+ 
+  - Docker
+ 
 # Installation
 
-     git clone git@github.com:GuillaumeJUST/simple-application.git
-     cd simple-application/
+Copy the code or fork the repository
 
 # Running 
  
