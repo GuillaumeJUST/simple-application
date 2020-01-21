@@ -16,11 +16,16 @@ This is a simple php application with unit test.
 
      git clone git@github.com:GuillaumeJUST/simple-application.git
      cd simple-application/
-     composer install
- 
+
 # Running 
  
+    composer install
     php index.php
+    
+Or with docker
+
+    docker build -t simple-application .
+    docker run -it --rm --name my-running-simple-application simple-application
 
 # Test
 
