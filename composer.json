@@ -1,6 +1,6 @@
 {
-    "name": "guillaumejust/tracktik",
-    "description": "PHP developer evaluation",
+    "name": "guillaumejust/simple-application",
+    "description": "PHP Simple application with unit test",
     "authors": [
         {
             "name": "Guillaume JUST",
