@@ -2,49 +2,67 @@
 
 namespace App;
 
-class ElectronicItem
+abstract class ElectronicItem
 {
-    /** * @var float */
-    private $price;
+    abstract public function maxExtras(): ?int;
+    abstract public function getType(): string;
 
-    /** * @var string */
-    private $type;
+    protected $currentCounter = 0;
 
-    private $wired;
+    /**
+     * @var float
+     */
+    private $price = 0;
 
-    public const ELECTRONIC_ITEM_TELEVISION = 'television';
-    public const ELECTRONIC_ITEM_CONSOLE = 'console';
-    public const ELECTRONIC_ITEM_MICROWAVE = 'microwave';
+    /**
+     * @var ElectronicItem[]
+     */
+    private $extras = [];
 
-    public static $types = [self::ELECTRONIC_ITEM_CONSOLE, self::ELECTRONIC_ITEM_MICROWAVE, self::ELECTRONIC_ITEM_TELEVISION];
+    public function getName(): string {
+        return ucfirst($this->getType()) . ' ' . $this->currentCounter;
+    }
+
+    public function hasReachMaxExtras(): bool
+    {
+        return $this->maxExtras() !== null && \count($this->extras) >= $this->maxExtras();
+    }
+
+    /**
+     * @return ElectronicItem[]
+     */
+    public function getExtras(): array
+    {
+        return $this->extras;
+    }
+
+    public function addExtra(ElectronicItem $electronicItem): bool
+    {
+        if ($this->hasReachMaxExtras()) {
+            return false;
+        }
+
+        $this->extras[] = $electronicItem;
+        return true;
+    }
+
+    public function getTotalPrice(): float
+    {
+        $totalPrice = $this->price;
+        foreach($this->extras as $extra) {
+            $totalPrice += $extra->getTotalPrice();
+        }
+
+        return $totalPrice;
+    }
 
     public function getPrice(): float
     {
         return $this->price;
     }
 
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    public function getWired()
-    {
-        return $this->wired;
-    }
-
     public function setPrice(float $price): void
     {
         $this->price = $price;
-    }
-
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-    }
-
-    public function setWired($wired): void
-    {
-        $this->wired = $wired;
     }
 }

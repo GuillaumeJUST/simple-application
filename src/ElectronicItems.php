@@ -17,13 +17,17 @@ class ElectronicItems
     /**
      * Returns the items depending on the sorting type requested
      *
+     * @param bool $itemTotalPrice
+     *
      * @return ElectronicItem[]
      */
-    public function getSortedItems(): array
+    public function getSortedItems(bool $itemTotalPrice = true): array
     {
         $sortedItem = array_values($this->items);
-        usort($sortedItem, function (ElectronicItem $itemA, ElectronicItem $itemB) {
-            return $itemA->getPrice() * 100 > $itemB->getPrice() * 100;
+        usort($sortedItem, function (ElectronicItem $itemA, ElectronicItem $itemB) use($itemTotalPrice) {
+            $priceA = $itemTotalPrice ? $itemA->getTotalPrice() : $itemA->getPrice();
+            $priceB = $itemTotalPrice ? $itemB->getTotalPrice() : $itemB->getPrice();
+            return $priceA > $priceB;
         });
 
         return $sortedItem;
@@ -35,14 +39,19 @@ class ElectronicItems
      */
     public function getItemsByType(string $type): array
     {
-        $items = [];
-        if (\in_array($type, ElectronicItem::$types, true)) {
-            $callback = function (ElectronicItem $item) use ($type) {
-                return $item->getType() === $type;
-            };
-            $items = array_filter($this->items, $callback);
+        $callback = function (ElectronicItem $item) use ($type) {
+            return $item instanceof $type;
+        };
+        return array_filter($this->items, $callback);
+    }
+
+    public function getTotalPrice(): float
+    {
+        $totalPrice = 0;
+        foreach($this->items as $item) {
+            $totalPrice += $item->getTotalPrice();
         }
 
-        return $items;
+        return $totalPrice;
     }
 }

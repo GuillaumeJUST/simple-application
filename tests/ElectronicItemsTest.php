@@ -1,7 +1,10 @@
 <?php
 
-use App\ElectronicItem;
+use App\ItemMicrowave;
+use App\ItemTelevision;
+use App\ItemController;
 use App\ElectronicItems;
+use App\ElectronicItem;
 use PHPUnit\Framework\TestCase;
 
 
@@ -16,31 +19,36 @@ class ElectronicItemsTest extends TestCase
     {
         parent::setUp();
 
-        $electronicItem = new ElectronicItem();
-        $electronicItem->setPrice(20);
-        $electronicItem->setType(ElectronicItem::ELECTRONIC_ITEM_CONSOLE);
-        $electronicItem->setWired(20);
-        $electronicItems[] = $electronicItem;
-
-        $electronicItem = new ElectronicItem();
-        $electronicItem->setPrice(30);
-        $electronicItem->setType(ElectronicItem::ELECTRONIC_ITEM_TELEVISION);
-        $electronicItem->setWired(20);
-        $electronicItems[] = $electronicItem;
-
-        $electronicItem = new ElectronicItem();
-        $electronicItem->setPrice(10.2);
-        $electronicItem->setType(ElectronicItem::ELECTRONIC_ITEM_TELEVISION);
-        $electronicItem->setWired(20);
-        $electronicItems[] = $electronicItem;
-
-        $electronicItem = new ElectronicItem();
-        $electronicItem->setPrice(10);
-        $electronicItem->setType(ElectronicItem::ELECTRONIC_ITEM_TELEVISION);
-        $electronicItem->setWired(20);
-        $electronicItems[] = $electronicItem;
-
+        $electronicItems = $this->generateElectronicItems();
+        shuffle($electronicItems);
         $this->electronicItems = new ElectronicItems($electronicItems);
+    }
+
+    private function generateElectronicItems(): array
+    {
+        $electronicItems = [];
+
+        $electronicItem = new ItemTelevision();
+        $electronicItem->setPrice(50);
+        $electronicItems[] = $electronicItem;
+
+        $electronicItem = new ItemTelevision();
+        $electronicItem->setPrice(10);
+        $electronicItems[] = $electronicItem;
+
+        $electronicItem = new ItemTelevision();
+        $electronicItem->setPrice(40);
+        $electronicItems[] = $electronicItem;
+
+        $electronicItem = new ItemMicrowave();
+        $electronicItem->setPrice(5);
+        $electronicItems[] = $electronicItem;
+
+        $electronicItem = new ItemMicrowave();
+        $electronicItem->setPrice(35);
+        $electronicItems[] = $electronicItem;
+
+        return $electronicItems;
     }
 
     public function testFirstTypeSortedItems(): void
@@ -48,7 +56,7 @@ class ElectronicItemsTest extends TestCase
         $sortedElectronicItems = $this->electronicItems->getSortedItems();
         /** @var ElectronicItem $sortedElectronicItem */
         $sortedElectronicItem = array_shift($sortedElectronicItems);
-        $this->assertEquals(ElectronicItem::ELECTRONIC_ITEM_TELEVISION, $sortedElectronicItem->getType());
+        $this->assertInstanceOf(ItemMicrowave::Class, $sortedElectronicItem);
     }
 
     public function testFirstPriceSortedItems(): void
@@ -56,7 +64,7 @@ class ElectronicItemsTest extends TestCase
         $sortedElectronicItems = $this->electronicItems->getSortedItems();
         /** @var ElectronicItem $sortedElectronicItem */
         $sortedElectronicItem = array_shift($sortedElectronicItems);
-        $this->assertEquals(10, $sortedElectronicItem->getPrice());
+        $this->assertEquals(5, $sortedElectronicItem->getTotalPrice());
     }
 
     public function testLastTypeSortedItems(): void
@@ -64,7 +72,7 @@ class ElectronicItemsTest extends TestCase
         $sortedElectronicItems = $this->electronicItems->getSortedItems();
         /** @var ElectronicItem $sortedElectronicItem */
         $sortedElectronicItem = array_pop($sortedElectronicItems);
-        $this->assertEquals(ElectronicItem::ELECTRONIC_ITEM_TELEVISION, $sortedElectronicItem->getType());
+        $this->assertInstanceOf(ItemTelevision::Class, $sortedElectronicItem);
     }
 
     public function testLastPriceSortedItems(): void
@@ -72,18 +80,48 @@ class ElectronicItemsTest extends TestCase
         $sortedElectronicItems = $this->electronicItems->getSortedItems();
         /** @var ElectronicItem $sortedElectronicItem */
         $sortedElectronicItem = array_pop($sortedElectronicItems);
-        $this->assertEquals(30, $sortedElectronicItem->getPrice());
+        $this->assertEquals(50, $sortedElectronicItem->getTotalPrice());
     }
 
     public function testItemByTypeWithResultTelevision(): void
     {
-        $ElectronicTelevisionItems = $this->electronicItems->getItemsByType(ElectronicItem::ELECTRONIC_ITEM_TELEVISION);
+        $ElectronicTelevisionItems = $this->electronicItems->getItemsByType(ItemTelevision::Class);
         $this->assertCount(3, $ElectronicTelevisionItems);
     }
 
     public function testItemByTypeWithoutResult(): void
     {
-        $ElectronicTelevisionItems = $this->electronicItems->getItemsByType(ElectronicItem::ELECTRONIC_ITEM_MICROWAVE);
+        $ElectronicTelevisionItems = $this->electronicItems->getItemsByType(ItemController::Class);
         $this->assertCount(0, $ElectronicTelevisionItems);
+    }
+
+    public function testTotalPrice(): void
+    {
+        $this->assertEquals(140, $this->electronicItems->getTotalPrice());
+    }
+
+    public function testFirstPriceSortedItemsWithController(): void
+    {
+        $electronicItems = $this->generateElectronicItems();
+
+        $itemTelevision = new ItemTelevision();
+        $itemTelevision->setPrice(20);
+
+        $electronicItem = new ItemController();
+        $electronicItem->setPrice(10);
+        $itemTelevision->addExtra($electronicItem);
+
+        $electronicItem = new ItemController();
+        $electronicItem->setPrice(40);
+        $itemTelevision->addExtra($electronicItem);
+        $electronicItems[] = $itemTelevision;
+
+        shuffle($electronicItems);
+        $this->electronicItems = new ElectronicItems($electronicItems);
+
+        $sortedElectronicItems = $this->electronicItems->getSortedItems();
+        /** @var ElectronicItem $sortedElectronicItem */
+        $sortedElectronicItem = array_pop($sortedElectronicItems);
+        $this->assertEquals(70, $sortedElectronicItem->getTotalPrice());
     }
 }
