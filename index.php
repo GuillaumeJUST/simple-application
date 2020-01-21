@@ -78,3 +78,23 @@ foreach ($electronicItemsWithExtras->getSortedItems(false) as $electronicItem) {
 }
 displayTitle('Total');
 displayRowItemPrice('Total price', $electronicItems->getTotalPrice());
+
+echo PHP_EOL;
+displayTitle('Question 2');
+echo PHP_EOL;
+
+$itemConsoles = $electronicItems->getItemsByType(\App\ItemConsole::class);
+
+if (isset($itemConsoles[0])) {
+    $itemConsole = $itemConsoles[0];
+
+    $priceFormatted = formatPrice($itemConsole->getTotalPrice());
+    echo 'Total price of the console is ' . $priceFormatted . ' ' . $currency . PHP_EOL;
+    displayTitle('Details');
+    displayRowItemPrice($itemConsole->getName(), $itemConsole->getPrice());
+    foreach ($itemConsole->getExtras() as $extra) {
+        displayRowItemPrice($extra->getName(), $extra->getPrice());
+    }
+} else {
+    echo 'Error: console not found !' . PHP_EOL;
+}
